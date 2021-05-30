@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+
+  pwic_service:
+    build: .
+    container_name: pwic1
+    image: pwic:v2
+    command: sh -c ". /project/venv/bin/activate && python /project/manage.py runserver 0.0.0.0:8000"
+    ports:
+      - '8000:8000'
+
+
+  pwic_service2:
+      build: .
+      container_name: pwic2
+      image: pwic:v2
+      command: sh -c ". /project/venv/bin/activate && python /project/manage.py runserver 0.0.0.0:8001"
+      ports:
+        - '8001:8001'
+
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./database/:/var/lib/mysql
+
+
